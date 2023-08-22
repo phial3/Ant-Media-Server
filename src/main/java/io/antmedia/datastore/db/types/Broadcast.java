@@ -354,6 +354,9 @@ public class Broadcast {
 	 */
 	private long updateTime = 0;
 
+	@ApiModelProperty(value = "if true, only subscribers registered to this broadcast are allowed to watch.")
+	private boolean subscriberOnly = false;
+
 	public Broadcast(String status, String name) {
 		this.setStatus(status);
 		this.setName(name);
@@ -819,5 +822,12 @@ public class Broadcast {
 	public void setUpdateTime(long updateTime) {
 		this.updateTime = updateTime;
 	}
-	
+
+	public boolean isSubscriberOnly() {
+		return subscriberOnly;
+	}
+
+	public void setSubscriberOnly(boolean subscriberOnly) {
+		this.subscriberOnly = subscriberOnly;
+	}
 }

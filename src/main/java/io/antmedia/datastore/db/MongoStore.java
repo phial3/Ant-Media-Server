@@ -796,6 +796,7 @@ public class MongoStore extends DataStore {
 				updates.add(set(META_DATA, broadcast.getMetaData()));
 				updates.add(set("playlistLoopEnabled", broadcast.isPlaylistLoopEnabled()));
 				updates.add(set("updateTime", broadcast.getUpdateTime()));
+				updates.add(set("subscriberOnly", broadcast.isSubscriberOnly()));
 
 				
 				UpdateResult updateResult = query.update(updates).execute();
@@ -1042,6 +1043,36 @@ public class MongoStore extends DataStore {
 		}
 		return result;
 	}
+
+	@Override
+	public boolean blockSubscriber(String streamId, String subscriberId,
+								   boolean playBlocked, boolean publishBlocked,
+								   long playBlockTime, long playBlockedUntilTime,
+								   long publishBlockTime, long publishBlockedUntilTime) {
+		synchronized (this) {
+			if (streamId == null || subscriberId == null) {
+				return false;
+			}
+
+			try {
+				UpdateResult updateResult = subscriberDatastore.find(Subscriber.class)
+						.filter(Filters.eq(STREAM_ID, streamId), Filters.eq("subscriberId", subscriberId))
+						.update(set("playBlocked", playBlocked),
+								set("publishBlocked", publishBlocked),
+								set("playBlockTime", playBlockTime),
+								set("playBlockedUntilTime", playBlockedUntilTime),
+								set("publishBlockTime", publishBlockTime),
+								set("publishBlockedUntilTime", publishBlockedUntilTime))
+						.execute();
+
+				return updateResult.getMatchedCount() == 1;
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				return false;
+			}
+		}
+	}
+
 
 	@Override
 	public boolean revokeSubscribers(String streamId) {

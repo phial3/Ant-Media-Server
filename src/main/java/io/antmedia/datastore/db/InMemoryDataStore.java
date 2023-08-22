@@ -755,6 +755,11 @@ public class InMemoryDataStore extends DataStore {
 	}
 
 	@Override
+	public boolean blockSubscriber(String streamId, String subscriberId, boolean playBlocked, boolean publishBlocked, long playBlockTime, long playBlockedUntilTime, long publishBlockTime, long publishBlockedUntilTime) {
+		return false;
+	}
+
+	@Override
 	public boolean revokeSubscribers(String streamId) {
 		boolean result = false;
 		Collection<Subscriber> subscriberCollection = subscriberMap.values();

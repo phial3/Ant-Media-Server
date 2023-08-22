@@ -11,7 +11,6 @@ import io.antmedia.rest.servlet.EndpointProxy;
 import io.antmedia.security.ITokenService;
 import io.antmedia.settings.ServerSettings;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.message.BasicHeader;
@@ -166,7 +165,7 @@ public class RestProxyTest {
 
 		appSettings.setIpFilterEnabled(true);
 		Mockito.doReturn(appSettings).when(restFilter).getAppSettings();
-		Mockito.doReturn(serverSettings).when(restFilter).getServerSetting();
+		Mockito.doReturn(serverSettings).when(restFilter).getServerSettings();
 
 		httpServletRequest.setMethod(HttpMethod.POST);
 		restFilter.doFilter(httpServletRequest,httpServletResponse,filterChain);
